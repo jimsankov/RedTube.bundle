@@ -1,4 +1,4 @@
-import re, time, random
+import urllib, re, time, random
 
 NAME = 'RedTube'
 randomArt = random.randint(1,4)
@@ -251,9 +251,15 @@ def PlayVideo(sender, url):
 	#Log(content)
 	#Log(headers)
 	#vidurl = re.compile('so.addVariable\("file","(.+?)"\)').findall(content, re.DOTALL)
-	vidurl = re.compile('"<source src=\'(.+?)\' type=\'video/mp4\'>"').findall(content, re.DOTALL)
+	#vidurl = re.compile('"<source src=\'(.+?)\' type=\'video/mp4\'>"').findall(content, re.DOTALL)
+	vidurl = re.compile('flv_h264_url=(.+?)%0A&http\.startparam').findall(content, re.DOTALL)
+	if len(vidurl) < 1:
+		vidurl = re.compile('"<source src=\'(.+?)\' type=\'video/mp4\'>"').findall(content, re.DOTALL)
 	#Log(vidurl)
+	#urlresult = urllib.unquote(vidurl[0])
+	#Log.Debug("urlresult:" + urlresult)
 	if len(vidurl) > 0:
-		return Redirect(vidurl[0])
+		#return Redirect(vidurl[0])
+		return Redirect(urllib.unquote(vidurl[0]))
 	else:
 		return None
